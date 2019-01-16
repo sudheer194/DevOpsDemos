@@ -35,6 +35,11 @@ COPY ./webapp.war /usr/local/tomcat/webapps
 5. Login to Jenkins console and add Docker server to execute commands from Jenkins  
 Manage Jenkins --> Configure system -->  Publish over SSH --> add Docker server and credentials
 
+Enable the password based authentication for Docker server -
+# vi /etc/ss/ssh_config
+give - "Password authentication yes" in file
+# service sshd restart
+
 6. Create Jenkins job 
 
 A) Source Code Management  
@@ -45,7 +50,7 @@ B) Build
  Root POM: pom.xml  
  Goals and options : clean install package  
  
-C) send files or execute commands over SSH
+C) send files or execute commands over SSH - POST BUILD STEPS 
  Name: docker_host  
  Source files	: webapp/target/*.war  
  Remove prefix	: webapp/target  
@@ -61,6 +66,8 @@ D) send files or execute commands over SSH
 8. Execute Jenkins job
 
 9. check images and containers again on Docker host. This time an image and container get creates through Jenkins job
+
+# chown -R dockeradmin:dockeradmin /opt/docker
 
 10. Access web application from browser which is running on container
 <docker_host_Public_IP>:8090
